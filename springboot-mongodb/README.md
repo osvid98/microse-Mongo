@@ -1,2 +1,0 @@
-# springboot-mongodb
-springboot-mongodb
