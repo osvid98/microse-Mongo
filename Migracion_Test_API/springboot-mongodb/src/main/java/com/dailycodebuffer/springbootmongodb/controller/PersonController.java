@@ -1,6 +1,8 @@
 package com.dailycodebuffer.springbootmongodb.controller;
 
+import com.dailycodebuffer.springbootmongodb.classes.InsertionResult;
 import com.dailycodebuffer.springbootmongodb.collection.Person;
+import com.dailycodebuffer.springbootmongodb.collection.Address;
 import com.dailycodebuffer.springbootmongodb.service.PersonService;
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +12,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import com.dailycodebuffer.springbootmongodb.DbDriverMongo;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/person")
@@ -74,5 +78,45 @@ public class PersonController {
         } else {
             return "No se pudo encontrar ningún documento en la colección.";
         }
+    }
+
+    @PostMapping("/insert")
+    public String insert() {
+        Map<String, Object> dataPersona = new HashMap<>();
+        dataPersona.put("nombre", "DAVID_Embebido");
+        dataPersona.put("edad", 12);
+
+        Map<String, Object> direccion = new HashMap<>();
+        direccion.put("calle", "123 Main St");
+        direccion.put("ciudad", "Ciudad Ejemplo");
+        direccion.put("estado", "Estado Ejemplo");
+
+        dataPersona.put("direccion", direccion);
+
+        // Insertar la persona en la base de datos
+        boolean insercionExitosa = dbDriverMongo.insert("person", dataPersona);
+
+        return "Resultado: " + insercionExitosa;
+
+    }
+
+    @PostMapping("/insertWithId")
+    public String insertWithId() {
+        Map<String, Object> dataPersona = new HashMap<>();
+        dataPersona.put("_id", 120);
+        dataPersona.put("nombre", "DAVID_Retorno2");
+        dataPersona.put("edad", 12);
+
+        Map<String, Object> direccion = new HashMap<>();
+        direccion.put("calle", "123 Main St");
+        direccion.put("ciudad", "Ciudad Ejemplo");
+        direccion.put("estado", "Estado Ejemplo");
+
+        dataPersona.put("direccion", direccion);
+
+        // Insertar la persona en la base de datos
+        InsertionResult insercionExitosa = dbDriverMongo.insertWithId("person", dataPersona);
+
+        return "Resultado: " + insercionExitosa;
     }
 }
